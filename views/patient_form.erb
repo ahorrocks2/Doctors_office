@@ -1,0 +1,21 @@
+<h1><%=@doctor.doc_name()%></h1>
+
+<% if @doctor.patient_of().any?() %>
+<h3>Here are all the patients:</h3>
+<ul>
+  <% @doctor.patient_of().each() do |patient| %>
+  <li><%= patient.patient_first_name() %></li>
+  <% end %>
+</ul>
+
+<% else %>
+<h3>There aren't any patients yet!</h3>
+<% end %>
+
+<form id="form_id" action="/patient/new" method="post">
+  <input id="doc_id" name="doc_id" type="hidden" value="<%= @doctor.doc_id() %>">
+  <input type="text" name="new_patientF" placeholder="First Name of Patient">
+  <input type="text" name="new_patientL" placeholder="Last Name of Patient">
+  <input type="text" name="new_patientBD" placeholder="Patient's Birthdate">
+  <button name="submit">Add Patient</button>
+</form>
