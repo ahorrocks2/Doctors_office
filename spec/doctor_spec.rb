@@ -1,6 +1,7 @@
 require("rspec")
 require("pg")
 require("doctor")
+require('pry')
 
 DB = PG.connect({:dbname => "test_doctors_office"})
 
@@ -42,5 +43,16 @@ describe(Doctor) do
       expect(test_doc1).to(eq(test_doc2))
     end
   end
+
+  describe('.find') do
+    it('return a doctor that matches the id') do
+      test_doc1 = Doctor.new({:doc_name => 'Whitley', :specialty => 'Dentist', :doc_id => nil})
+      test_doc2 = Doctor.new({:doc_name => 'Benson', :specialty => 'Pediatrician', :doc_id => nil})
+      test_doc1.save()
+      test_doc2.save()
+      expect(Doctor.find(test_doc2.doc_id)).to(eq(test_doc2))
+    end
+  end
+
 
 end
