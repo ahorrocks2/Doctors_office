@@ -1,3 +1,5 @@
+require('pry')
+
 class Doctor
 
   attr_reader(:doc_name, :specialty, :doc_id)
@@ -8,27 +10,26 @@ class Doctor
     @doc_id = attributes.fetch(:doc_id)
   end
 
-  define_method(:doc_name) do
-    @doc_name
-  end
-
-  define_method(:specialty) do
-    @specialty
-  end
-
-  define_method(:doc_id) do
-    @doc_id
-  end
-
   define_singleton_method(:all) do
     returned_doctors = DB.exec("SELECT * FROM doctors;")
     doctors = []
     returned_doctors.each() do |doctor|
-      doc_name = doctors.fetch("doc_name")
-      specialty = doctors.fetch("specialty")
-      doc_id = doctors.fetch("doc_id").to_i()
-      doctors.push(Doctors.new({:doc_name => doc_name, :specialty => specialty, :doc_id => doc_id}))
+      doc_name = doctor.fetch("doc_name")
+      specialty = doctor.fetch("specialty")
+      doc_id = doctor.fetch("doc_id").to_i()
+      doctors.push(Doctor.new({:doc_name => doc_name, :specialty => specialty, :doc_id => doc_id}))
     end
     doctors
   end
+
+  define_method(:save) do
+    result = DB.exec("INSERT INTO doctors (doc_name, specialty) VALUES ('#{@doc_name}', '#{@specialty}') RETURNING doc_id;")
+    @doc_id = result.first().fetch("doc_id").to_i()
+  end
+
+  define_method(:==) do |another_doctor|
+    self.doc_name == another_doctor.doc_name && self.specialty == another_doctor.specialty
+    # self.doc_name().==(another_doctor.doc_name()).&(self.specialty()).==(another_doctor.specialty())
+  end
+
 end

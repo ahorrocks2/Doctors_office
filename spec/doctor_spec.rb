@@ -27,5 +27,20 @@ describe(Doctor) do
     end
   end
 
+  describe('#save') do
+    it('saves a doctor to the array doctors') do
+      test_doc =  Doctor.new({:doc_name => 'Benson', :specialty => 'Pediatrician', :doc_id => nil})
+      test_doc.save()
+      expect(Doctor.all()).to(eq([test_doc]))
+    end
+  end
+
+  describe('#==') do
+    it('overwrites the comparison operator') do
+      test_doc1 = Doctor.new({:doc_name => 'Whitley', :specialty => 'Dentist', :doc_id => nil})
+      test_doc2 = Doctor.new({:doc_name => 'Whitley', :specialty => 'Dentist', :doc_id => nil})
+      expect(test_doc1).to(eq(test_doc2))
+    end
+  end
 
 end
